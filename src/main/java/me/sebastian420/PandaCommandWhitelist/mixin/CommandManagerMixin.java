@@ -21,9 +21,7 @@ public class CommandManagerMixin {
 	private boolean canUseRedirection(CommandNode<ServerCommandSource> commandNode, Object objSource) {
 		ServerCommandSource source = (ServerCommandSource) objSource;
 
-		if(source.hasPermissionLevel(4)){
-			return true;
-		}
+		if(source.hasPermissionLevel(4)) return true;
 
 		if (!(commandNode instanceof LiteralCommandNode<ServerCommandSource> node)) return commandNode.canUse(source);
 		return allowedCommands.contains(node.getLiteral().split(" ")[0]) && commandNode.canUse(source);

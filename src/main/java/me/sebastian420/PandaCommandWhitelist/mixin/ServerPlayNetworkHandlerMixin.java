@@ -23,13 +23,9 @@ public abstract class ServerPlayNetworkHandlerMixin {
     private void onCommandExecution(CommandExecutionC2SPacket packet, CallbackInfo ci) {
         String command = packet.command().split(" ")[0]; // Get the first word of the command
         ServerPlayerEntity player = ((ServerPlayNetworkHandler) (Object) this).player;
-        if (player.hasPermissionLevel(4)) {
-            return;
-        }
+        if (player.hasPermissionLevel(4)) return;
 
-        if (whitelistedCommands.contains(command)) {
-            // Command is whitelisted, allow it to proceed
-        } else {
+        if (!whitelistedCommands.contains(command)) {
             ci.cancel();
             player.sendMessage(Text.of("That command is blocked or doesn't exist."));
         }
