@@ -34,9 +34,17 @@ public abstract class ServerPlayNetworkHandlerMixin {
 
     @Unique
     private boolean isCommandAllowed(String fullCommand) {
+        if (fullCommand == null || fullCommand.trim().isEmpty()) {
+            return false;
+        }
+
         String[] commandParts = fullCommand.split(" ");
 
         for (String whitelistedCommand : whitelistedCommands) {
+            if (whitelistedCommand == null || whitelistedCommand.trim().isEmpty()) {
+                continue;
+            }
+
             String[] whitelistedParts = whitelistedCommand.split(" ");
 
             if (whitelistedParts.length > commandParts.length) continue;
