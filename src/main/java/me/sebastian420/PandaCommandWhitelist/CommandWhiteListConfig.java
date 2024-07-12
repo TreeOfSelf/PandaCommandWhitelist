@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandWhiteListConfig {
-    private static final String CONFIG_FILE = "config/PandaCommandWhitelist.json";
+    private static final String CONFIG_FILE = "PandaCommandWhitelist.json";
     private static final List<String> DEFAULT_COMMANDS = Arrays.asList("tell", "me", "msg", "w");
     private static List<String> whitelistedCommands;
 
