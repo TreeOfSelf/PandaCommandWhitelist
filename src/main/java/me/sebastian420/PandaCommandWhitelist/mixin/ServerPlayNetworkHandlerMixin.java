@@ -21,13 +21,43 @@ public abstract class ServerPlayNetworkHandlerMixin {
 
     @Inject(method = "onCommandExecution", at = @At(value = "HEAD"), cancellable = true)
     private void onCommandExecution(CommandExecutionC2SPacket packet, CallbackInfo ci) {
-        String command = packet.command().split(" ")[0]; // Get the first word of the command
+        String fullCommand = packet.command();
         ServerPlayerEntity player = ((ServerPlayNetworkHandler) (Object) this).player;
+
         if (player.hasPermissionLevel(4)) return;
 
-        if (!whitelistedCommands.contains(command)) {
+        if (!isCommandAllowed(fullCommand)) {
             ci.cancel();
             player.sendMessage(Text.of("That command is blocked or doesn't exist."));
         }
+    }
+
+    @Unique
+    private boolean isCommandAllowed(String fullCommand) {
+        String[] commandParts = fullCommand.split(" ");
+
+        for (String whitelistedCommand : whitelistedCommands) {
+            String[] whitelistedParts = whitelistedCommand.split(" ");
+
+            if (whitelistedParts.length > commandParts.length) continue;
+
+            boolean match = true;
+            for (int i = 0; i < whitelistedParts.length; i++) {
+                if (whitelistedParts[i].equals("*")) continue;
+                if (!whitelistedParts[i].equals(commandParts[i])) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                if (whitelistedParts.length == commandParts.length ||
+                        (whitelistedParts.length > 0 && whitelistedParts[whitelistedParts.length - 1].equals("*"))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

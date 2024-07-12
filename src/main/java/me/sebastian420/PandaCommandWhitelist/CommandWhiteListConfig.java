@@ -10,13 +10,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class CommandWhiteListConfig {
     private static final String CONFIG_FILE = "PandaCommandWhitelist.json";
-    private static final List<String> DEFAULT_COMMANDS = Arrays.asList("tell", "me", "msg", "w");
+    private static final List<String> DEFAULT_COMMANDS = Arrays.asList("tell *", "me *", "msg *", "w *");
     private static List<String> whitelistedCommands;
 
     public static void init() {

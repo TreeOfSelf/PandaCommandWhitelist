@@ -11,11 +11,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import me.sebastian420.PandaCommandWhitelist.CommandWhiteListConfig;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mixin(CommandManager.class)
 public class CommandManagerMixin {
 	@Unique
-	private final List<String> allowedCommands = CommandWhiteListConfig.getWhitelistedCommands();
+	private final List<String> allowedCommands = CommandWhiteListConfig.getWhitelistedCommands()
+			.stream()
+			.map(cmd -> cmd.split(" ")[0])
+			.collect(Collectors.toList());
 
 	@Redirect(method = "makeTreeForSource", at = @At(value="INVOKE", remap = false, target="Lcom/mojang/brigadier/tree/CommandNode;canUse(Ljava/lang/Object;)Z"))
 	private boolean canUseRedirection(CommandNode<ServerCommandSource> commandNode, Object objSource) {
@@ -24,6 +28,6 @@ public class CommandManagerMixin {
 		if(source.hasPermissionLevel(4)) return true;
 
 		if (!(commandNode instanceof LiteralCommandNode<ServerCommandSource> node)) return commandNode.canUse(source);
-		return allowedCommands.contains(node.getLiteral().split(" ")[0]) && commandNode.canUse(source);
+		return allowedCommands.contains(node.getLiteral()) && commandNode.canUse(source);
 	}
 }
