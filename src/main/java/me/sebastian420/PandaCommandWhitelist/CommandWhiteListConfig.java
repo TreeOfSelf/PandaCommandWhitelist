@@ -42,11 +42,20 @@ public class CommandWhiteListConfig {
             FileReader reader = new FileReader(configFile);
             Type listType = new TypeToken<ArrayList<String>>(){}.getType();
             List<String> loadedCommands = new Gson().fromJson(reader, listType);
-            whitelistedCommands = loadedCommands.stream()
-                    .filter(Objects::nonNull)
-                    .filter(cmd -> !cmd.trim().isEmpty())
-                    .collect(Collectors.toList());
             reader.close();
+
+            whitelistedCommands = new ArrayList<>();
+
+            for (String cmd : loadedCommands) {
+                if (cmd != null && !cmd.trim().isEmpty()) {
+                    whitelistedCommands.add(cmd);
+                    if (cmd.endsWith(" *")) {
+                        String commandWithoutWildcard = cmd.substring(0, cmd.length() - 2).trim();
+                        whitelistedCommands.add(commandWithoutWildcard);
+                    }
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
             whitelistedCommands = new ArrayList<>(DEFAULT_COMMANDS);
