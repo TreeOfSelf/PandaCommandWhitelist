@@ -5,18 +5,18 @@
 	"name": "panda-command-whitelist",
 	"description": "Whitelist commands",
 	"authors": [
-		"Sebastian420"
+		"TreeOfSelf"
 	],
 	"contact": {
-		"homepage": "",
-		"sources": ""
+		"homepage": "https://github.com/TreeOfSelf/PandaCommandWhitelist",
+		"sources": "https://github.com/TreeOfSelf/PandaCommandWhitelist"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/panda-command-whitelist/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"me.sebastian420.PandaCommandWhitelist.PandaCommandWhitelist"
+          "me.TreeOfSelf.PandaCommandWhitelist.PandaCommandWhitelist"
 		]
 	},
 	"mixins": [

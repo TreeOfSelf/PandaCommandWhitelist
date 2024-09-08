@@ -1,10 +1,10 @@
 {
 	"required": true,
-	"package": "me.sebastian420.PandaCommandWhitelist.mixin",
+	"package": "me.TreeOfSelf.PandaCommandWhitelist.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"CommandManagerMixin",
-		"ServerPlayNetworkHandlerMixin"
+      "CommandManagerMixin",
+      "ServerPlayNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

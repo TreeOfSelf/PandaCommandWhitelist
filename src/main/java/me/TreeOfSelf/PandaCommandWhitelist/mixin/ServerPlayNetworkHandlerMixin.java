@@ -1,5 +1,6 @@
-package me.sebastian420.PandaCommandWhitelist.mixin;
+package me.TreeOfSelf.PandaCommandWhitelist.mixin;
 
+import me.TreeOfSelf.PandaCommandWhitelist.CommandWhiteListConfig;
 import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -9,7 +10,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import me.sebastian420.PandaCommandWhitelist.CommandWhiteListConfig;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package me.sebastian420.PandaCommandWhitelist;
+package me.TreeOfSelf.PandaCommandWhitelist;
 
 import net.fabricmc.api.ModInitializer;
 

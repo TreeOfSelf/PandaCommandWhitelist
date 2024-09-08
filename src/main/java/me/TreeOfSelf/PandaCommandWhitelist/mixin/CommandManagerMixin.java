@@ -1,14 +1,14 @@
-package me.sebastian420.PandaCommandWhitelist.mixin;
+package me.TreeOfSelf.PandaCommandWhitelist.mixin;
 
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.TreeOfSelf.PandaCommandWhitelist.CommandWhiteListConfig;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import me.sebastian420.PandaCommandWhitelist.CommandWhiteListConfig;
 
 import java.util.List;
 import java.util.stream.Collectors;
