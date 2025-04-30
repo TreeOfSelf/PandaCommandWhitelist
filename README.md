@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/b42c8dfd-6f11-4cfe-835b-95ec211b8499)
+
 # PandaCommandWhitelist
 
 ## Description
