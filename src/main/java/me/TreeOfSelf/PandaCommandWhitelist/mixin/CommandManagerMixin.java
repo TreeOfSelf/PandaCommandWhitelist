@@ -16,18 +16,19 @@ import java.util.stream.Collectors;
 @Mixin(CommandManager.class)
 public class CommandManagerMixin {
 	@Unique
-	private final List<String> allowedCommands = CommandWhiteListConfig.getWhitelistedCommands()
+	private static final List<String> allowedCommands = CommandWhiteListConfig.getWhitelistedCommands()
 			.stream()
 			.map(cmd -> cmd.split(" ")[0])
 			.collect(Collectors.toList());
 
-	@Redirect(method = "makeTreeForSource", at = @At(value="INVOKE", remap = false, target="Lcom/mojang/brigadier/tree/CommandNode;canUse(Ljava/lang/Object;)Z"))
-	private boolean canUseRedirection(CommandNode<ServerCommandSource> commandNode, Object objSource) {
+	@Redirect(method = "deepCopyNodes", at = @At(value="INVOKE", target="Lcom/mojang/brigadier/tree/CommandNode;canUse(Ljava/lang/Object;)Z"))
+	private static boolean canUseRedirection(CommandNode<ServerCommandSource> commandNode, Object objSource) {
 		ServerCommandSource source = (ServerCommandSource) objSource;
 
 		if(source.hasPermissionLevel(4)) return true;
 
 		if (!(commandNode instanceof LiteralCommandNode<ServerCommandSource> node)) return commandNode.canUse(source);
+		
 		return allowedCommands.contains(node.getLiteral()) && commandNode.canUse(source);
 	}
 }
