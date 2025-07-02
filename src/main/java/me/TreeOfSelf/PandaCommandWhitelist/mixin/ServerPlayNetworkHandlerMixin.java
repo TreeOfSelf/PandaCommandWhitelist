@@ -28,7 +28,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
 
         if (!isCommandAllowed(fullCommand)) {
             ci.cancel();
-            player.sendMessage(Text.of("That command is blocked or doesn't exist."));
+            player.sendMessage(Text.of(CommandWhiteListConfig.getBlockedMessage()));
         }
     }
 

@@ -1,6 +1,5 @@
 package me.TreeOfSelf.PandaCommandWhitelist;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -9,14 +8,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CommandWhiteListConfig {
     private static final String CONFIG_FILE = "PandaCommandWhitelist.json";
     private static final List<String> DEFAULT_COMMANDS = Arrays.asList("tell *", "me *", "msg *", "w *");
+    private static final String DEFAULT_BLOCKED_MESSAGE = "That command is blocked or doesn't exist.";
+    
     private static List<String> whitelistedCommands;
+    private static String blockedMessage;
+
+    public static class Config {
+        public List<String> commands;
+        public String blockedMessage;
+        
+        public Config() {
+            this.commands = new ArrayList<>(DEFAULT_COMMANDS);
+            this.blockedMessage = DEFAULT_BLOCKED_MESSAGE;
+        }
+    }
 
     public static void init() {
         File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), CONFIG_FILE);
@@ -30,7 +40,8 @@ public class CommandWhiteListConfig {
         try {
             configFile.getParentFile().mkdirs();
             FileWriter writer = new FileWriter(configFile);
-            new GsonBuilder().setPrettyPrinting().create().toJson(DEFAULT_COMMANDS, writer);
+            Config defaultConfig = new Config();
+            new GsonBuilder().setPrettyPrinting().create().toJson(defaultConfig, writer);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,11 +51,33 @@ public class CommandWhiteListConfig {
     private static void loadConfig(File configFile) {
         try {
             FileReader reader = new FileReader(configFile);
-            Type listType = new TypeToken<ArrayList<String>>(){}.getType();
-            List<String> loadedCommands = new Gson().fromJson(reader, listType);
+            Gson gson = new Gson();
+            
+            Object rawJson = gson.fromJson(reader, Object.class);
             reader.close();
+            
+            Config config;
+            boolean needsConversion = false;
+            
+            if (rawJson instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<String> oldCommands = (List<String>) rawJson;
+                config = new Config();
+                config.commands = new ArrayList<>(oldCommands);
+                config.blockedMessage = DEFAULT_BLOCKED_MESSAGE;
+                needsConversion = true;
+            } else {
+                reader = new FileReader(configFile);
+                config = gson.fromJson(reader, Config.class);
+                reader.close();
+                
+                if (config == null) {
+                    config = new Config();
+                }
+            }
 
             whitelistedCommands = new ArrayList<>();
+            List<String> loadedCommands = config.commands != null ? config.commands : DEFAULT_COMMANDS;
 
             for (String cmd : loadedCommands) {
                 if (cmd != null && !cmd.trim().isEmpty()) {
@@ -56,13 +89,34 @@ public class CommandWhiteListConfig {
                 }
             }
 
+            blockedMessage = config.blockedMessage != null ? config.blockedMessage : DEFAULT_BLOCKED_MESSAGE;
+
+            if (needsConversion) {
+                saveConfig(configFile, config);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
             whitelistedCommands = new ArrayList<>(DEFAULT_COMMANDS);
+            blockedMessage = DEFAULT_BLOCKED_MESSAGE;
+        }
+    }
+
+    private static void saveConfig(File configFile, Config config) {
+        try {
+            FileWriter writer = new FileWriter(configFile);
+            new GsonBuilder().setPrettyPrinting().create().toJson(config, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public static List<String> getWhitelistedCommands() {
         return whitelistedCommands != null ? whitelistedCommands : new ArrayList<>(DEFAULT_COMMANDS);
+    }
+
+    public static String getBlockedMessage() {
+        return blockedMessage != null ? blockedMessage : DEFAULT_BLOCKED_MESSAGE;
     }
 }
