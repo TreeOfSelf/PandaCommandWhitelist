@@ -25,6 +25,8 @@ config/PandaCommandWhitelist.json generated at runtime
 
 You can either put the specific command, or the initial world and a wildcard to allow any command.
 
+## Commands
+`pcw reload` to reload the configuration
 
 ## Support
 
