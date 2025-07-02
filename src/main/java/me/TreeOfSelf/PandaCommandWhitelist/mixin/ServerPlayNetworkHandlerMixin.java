@@ -16,9 +16,6 @@ import java.util.List;
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class ServerPlayNetworkHandlerMixin {
 
-    @Unique
-    private final List<String> whitelistedCommands = CommandWhiteListConfig.getWhitelistedCommands();
-
     @Inject(method = "onCommandExecution", at = @At(value = "HEAD"), cancellable = true)
     private void onCommandExecution(CommandExecutionC2SPacket packet, CallbackInfo ci) {
         String fullCommand = packet.command();
@@ -39,6 +36,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
         }
 
         String[] commandParts = fullCommand.split(" ");
+        List<String> whitelistedCommands = CommandWhiteListConfig.getWhitelistedCommands();
 
         for (String whitelistedCommand : whitelistedCommands) {
             if (whitelistedCommand == null || whitelistedCommand.trim().isEmpty()) {

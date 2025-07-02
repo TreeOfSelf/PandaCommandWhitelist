@@ -3,6 +3,8 @@ package me.TreeOfSelf.PandaCommandWhitelist;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class CommandWhiteListConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger("panda-command-whitelist");
     private static final String CONFIG_FILE = "PandaCommandWhitelist.json";
     private static final List<String> DEFAULT_COMMANDS = Arrays.asList("tell *", "me *", "msg *", "w *");
     private static final String DEFAULT_BLOCKED_MESSAGE = "That command is blocked or doesn't exist.";
@@ -118,5 +121,11 @@ public class CommandWhiteListConfig {
 
     public static String getBlockedMessage() {
         return blockedMessage != null ? blockedMessage : DEFAULT_BLOCKED_MESSAGE;
+    }
+
+    public static void reload() {
+        LOGGER.info("Reloading PandaCommandWhitelist configuration...");
+        init();
+        LOGGER.info("Configuration reloaded successfully. {} commands whitelisted.", whitelistedCommands.size());
     }
 }
