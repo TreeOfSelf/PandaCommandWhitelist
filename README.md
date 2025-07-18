@@ -28,6 +28,10 @@ You can either put the specific command, or the initial world and a wildcard to 
 ## Commands
 `pcw reload` to reload the configuration
 
+## Try it out
+`hardcoreanarchy.gay`   (Deathban Anarchy)  
+`sky.hardcoreanarchy.gay`   (Skyblock Anarchy)
+
 ## Support
 
 [Support discord here!]( https://discord.gg/3tP3Tqu983)
