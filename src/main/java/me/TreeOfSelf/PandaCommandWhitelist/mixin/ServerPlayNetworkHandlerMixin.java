@@ -1,6 +1,8 @@
 package me.TreeOfSelf.PandaCommandWhitelist.mixin;
 
 import me.TreeOfSelf.PandaCommandWhitelist.CommandWhiteListConfig;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +23,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
         String fullCommand = packet.command();
         ServerPlayerEntity player = ((ServerPlayNetworkHandler) (Object) this).player;
 
-        if (player.hasPermissionLevel(4)) return;
+        if (player.getPermissions().hasPermission(new Permission.Level(PermissionLevel.ADMINS))) return;
 
         if (!isCommandAllowed(fullCommand)) {
             ci.cancel();

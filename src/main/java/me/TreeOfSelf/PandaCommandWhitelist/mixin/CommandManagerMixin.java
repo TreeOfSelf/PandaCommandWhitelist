@@ -3,9 +3,12 @@ package me.TreeOfSelf.PandaCommandWhitelist.mixin;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.TreeOfSelf.PandaCommandWhitelist.CommandWhiteListConfig;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -16,6 +19,7 @@ import java.util.*;
 @Mixin(CommandManager.class)
 public class CommandManagerMixin {
 
+	@Unique
 	private static final ThreadLocal<Deque<String>> COMMAND_PATH = ThreadLocal.withInitial(ArrayDeque::new);
 
 	@Inject(method = "deepCopyNodes", at = @At("HEAD"))
@@ -50,7 +54,7 @@ public class CommandManagerMixin {
 
 		ServerCommandSource serverSource = (ServerCommandSource) source;
 
-		if (serverSource.hasPermissionLevel(4)) {
+		if (serverSource.getPermissions().hasPermission(new Permission.Level(PermissionLevel.ADMINS))) {
 			return true;
 		}
 

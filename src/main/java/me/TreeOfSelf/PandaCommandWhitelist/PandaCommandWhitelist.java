@@ -2,6 +2,8 @@ package me.TreeOfSelf.PandaCommandWhitelist;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
@@ -21,7 +23,7 @@ public class PandaCommandWhitelist implements ModInitializer {
 	private void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			dispatcher.register(CommandManager.literal("pcw")
-				.requires(source -> source.hasPermissionLevel(4))
+				.requires(source -> source.getPermissions().hasPermission(new Permission.Level(PermissionLevel.ADMINS)))
 				.then(CommandManager.literal("reload")
 					.executes(context -> {
 						CommandWhiteListConfig.reload();
